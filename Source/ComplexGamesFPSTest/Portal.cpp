@@ -45,12 +45,15 @@ void APortal::Tick(float DeltaTime)
 void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if ((Other != NULL) && (Other != this))
+	if (OtherPortal)
 	{
-		if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
+		if ((Other != NULL) && (Other != this))
 		{
-			OtherPortal->PortalActive = false;
-			Other->TeleportTo(OtherPortal->GetActorLocation(), Other->GetActorRotation(), false, false);
+			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
+			{
+				OtherPortal->PortalActive = false;
+				Other->TeleportTo(OtherPortal->GetActorLocation(), Other->GetActorRotation(), false, false);
+			}
 		}
 	}
 }

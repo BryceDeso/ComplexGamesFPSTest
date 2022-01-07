@@ -3,7 +3,7 @@
 #include "PortalGun.h"
 #include "Components/ActorComponent.h"
 #include "Components/InputComponent.h"
-#include "Materials/Material.h"
+#include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "Portal.h"
@@ -20,6 +20,17 @@ UPortalGun::UPortalGun()
 void UPortalGun::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TestComponent = this->GetOwner()->FindComponentByClass<UCapsuleComponent>();
+
+	for (int i = 0; i < TestComponent->GetAttachChildren().Num(); i++)
+	{
+		if (TestComponent->GetAttachChildren()[i]->ComponentHasTag("MainCamera"))
+		{
+			MainCamera = Cast<UCameraComponent>(TestComponent->GetAttachChildren()[i]);
+		}
+	}
+	
 
 	BindToInput();
 }
@@ -56,8 +67,8 @@ void UPortalGun::MovePortal1()
 
 		FActorSpawnParameters PortalSpawnParams;
 
-		const FVector MovePortal = OutHit.GetActor()->GetActorLocation();
-		const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
+		const FVector MovePortal = OutHit.ImpactPoint;
+		/*const FRotator RotatePortal = */
 
 		if (isHit)
 		{
@@ -91,7 +102,7 @@ void UPortalGun::MovePortal2()
 
 		FActorSpawnParameters PortalSpawnParams;
 
-		const FVector MovePortal = OutHit.GetActor()->GetActorLocation();
+		const FVector MovePortal = OutHit.Location;
 		const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
 
 		if (isHit)
@@ -99,7 +110,6 @@ void UPortalGun::MovePortal2()
 			if (OutHit.bBlockingHit)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-
 				APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
 			}
 		}

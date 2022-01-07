@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Portal.h"
 #include "PortalGun.generated.h"
-
-class Materal;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COMPLEXGAMESFPSTEST_API UPortalGun : public UActorComponent
@@ -36,6 +35,9 @@ public:
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	TSubclassOf<APortal> Portal2;
+
+	UPROPERTY(AdvancedDisplay, EditAnywhere)
+	UCapsuleComponent* TestComponent;
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCameraComponent* MainCamera;
