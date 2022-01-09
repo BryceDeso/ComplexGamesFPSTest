@@ -76,8 +76,25 @@ void UPortalGun::MovePortal1()
 			{
 				if (OutHit.bBlockingHit)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-					APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal1, MovePortal, RotatePortal, PortalSpawnParams);
+					if (!PortalPlaced1)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal1, MovePortal, RotatePortal, PortalSpawnParams);
+						CurrentPortal1 = PortalSpawner;
+
+						if (PortalPlaced2)
+						{
+							CurrentPortal1->OtherPortal = CurrentPortal2;
+							CurrentPortal2->OtherPortal = CurrentPortal1;
+						}
+
+						PortalPlaced1 = true;
+					}
+					else
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+						CurrentPortal1->TeleportTo(MovePortal, RotatePortal);
+					}
 				}
 			}
 		}
@@ -118,8 +135,25 @@ void UPortalGun::MovePortal2()
 			{
 				if (OutHit.bBlockingHit)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-					APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
+					if (!PortalPlaced2)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
+						CurrentPortal2 = PortalSpawner;
+
+						if (PortalPlaced1)
+						{
+							CurrentPortal2->OtherPortal = CurrentPortal1;
+							CurrentPortal1->OtherPortal = CurrentPortal2;
+						}
+
+						PortalPlaced2 = true;
+					}
+					else
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+						CurrentPortal2->TeleportTo(MovePortal, RotatePortal);
+					}
 				}
 			}
 		}

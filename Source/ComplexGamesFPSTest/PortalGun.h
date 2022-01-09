@@ -32,10 +32,17 @@ public:
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	TSubclassOf<APortal> Portal1;
-
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	TSubclassOf<APortal> Portal2;
 
+	APortal* CurrentPortal1;
+	APortal* CurrentPortal2;
+
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCameraComponent* MainCamera;
+
+	UCapsuleComponent* TestComponent;
+
+	bool PortalPlaced1;
+	bool PortalPlaced2;
 };

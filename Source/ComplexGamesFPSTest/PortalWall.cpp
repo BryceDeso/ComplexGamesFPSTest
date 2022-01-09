@@ -16,6 +16,7 @@ APortalWall::APortalWall()
 	RootComponent = Collider;
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	Arrow->AttachTo(Collider);
 }
 
 // Called when the game starts or when spawned
