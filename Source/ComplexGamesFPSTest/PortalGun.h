@@ -37,8 +37,5 @@ public:
 	TSubclassOf<APortal> Portal2;
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
-	UCapsuleComponent* TestComponent;
-
-	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCameraComponent* MainCamera;
 };

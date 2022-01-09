@@ -58,25 +58,32 @@ void UPortalGun::MovePortal1()
 		FVector Start = MainCamera->GetComponentLocation();
 
 		FVector ForwardVector = MainCamera->GetForwardVector();
-		FVector End((ForwardVector * 1000.f) + Start);
+		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
 
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
-		FActorSpawnParameters PortalSpawnParams;
-
-		const FVector MovePortal = OutHit.ImpactPoint;
-		/*const FRotator RotatePortal = */
-
-		if (isHit)
+		if (OutHit.GetActor() && OutHit.GetActor()->GetRootComponent()->ComponentHasTag("PortalWall"))
 		{
-			if (OutHit.bBlockingHit)
+			FActorSpawnParameters PortalSpawnParams;
+
+			const FVector MovePortal = OutHit.ImpactPoint;
+			const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
+
+			if (isHit)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName())); \
+				if (OutHit.bBlockingHit)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
 					APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal1, MovePortal, RotatePortal, PortalSpawnParams);
+				}
 			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("You aren't hitting anything!")));
 		}
 	}
 	else
@@ -93,25 +100,32 @@ void UPortalGun::MovePortal2()
 		FVector Start = MainCamera->GetComponentLocation();
 
 		FVector ForwardVector = MainCamera->GetForwardVector();
-		FVector End((ForwardVector * 1000.f) + Start);
+		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
 
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
-		FActorSpawnParameters PortalSpawnParams;
-
-		const FVector MovePortal = OutHit.Location;
-		const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
-
-		if (isHit)
+		if (OutHit.GetActor() && OutHit.GetActor()->GetRootComponent()->ComponentHasTag("PortalWall"))
 		{
-			if (OutHit.bBlockingHit)
+			FActorSpawnParameters PortalSpawnParams;
+
+			const FVector MovePortal = OutHit.ImpactPoint;
+			const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
+
+			if (isHit)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-				APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
+				if (OutHit.bBlockingHit)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+					APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
+				}
 			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("You aren't hitting anything!")));
 		}
 	}
 	else
