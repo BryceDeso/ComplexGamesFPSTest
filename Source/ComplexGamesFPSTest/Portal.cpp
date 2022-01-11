@@ -3,6 +3,8 @@
 
 #include "Portal.h"
 #include "Components/BoxComponent.h"
+#include "Math/Quat.h"
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 APortal::APortal()
@@ -14,6 +16,9 @@ APortal::APortal()
 	RootComponent = Collider;
 
 	Collider->SetGenerateOverlapEvents(true);
+
+	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	Arrow->AttachTo(Collider);
 
 	PortalActive = true;
 }
@@ -52,7 +57,8 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
-				Other->TeleportTo(OtherPortal->GetActorLocation(), Other->GetActorRotation(), false, false);
+				FRotator OtherRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
+				Other->TeleportTo(OtherPortal->GetActorLocation(), OtherRotation, false, true);
 			}
 		}
 	}

@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/PlayerController.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "Portal.generated.h"
 
 UCLASS()
@@ -29,15 +31,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		void TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void EndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void EndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(VisibleAnywhere)
-		bool PortalActive;
+	bool PortalActive;
+
+	class UArrowComponent* Arrow;
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
-		APortal* OtherPortal;
+	APortal* OtherPortal;
 
+	class RootComponent* OldRoot;
 };
