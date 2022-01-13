@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "GameFramework/Actor.h"
-#include "GameFramework/Character.h"
 #include "Portal.generated.h"
 
 UCLASS()
@@ -39,10 +37,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	bool PortalActive;
 
+	UPROPERTY(VisibleAnywhere)
 	class UArrowComponent* Arrow;
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	APortal* OtherPortal;
 
-	class RootComponent* OldRoot;
+	UPROPERTY(VisibleAnywhere)
+	class ACharacter* TestChar;
 };

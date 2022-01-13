@@ -4,6 +4,7 @@
 #include "Portal.h"
 #include "Components/BoxComponent.h"
 #include "Math/Quat.h"
+#include "GameFramework/Character.h"
 #include "Components/ArrowComponent.h"
 
 // Sets default values
@@ -19,6 +20,9 @@ APortal::APortal()
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->AttachTo(Collider);
+	Arrow->SetArrowColor(FColor::White);
+	FQuat LocalArrowRotation = FQuat(FRotator(GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z));
+	Arrow->AddLocalRotation(LocalArrowRotation);
 
 	PortalActive = true;
 }
@@ -57,8 +61,18 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
-				FRotator OtherRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
-				Other->TeleportTo(OtherPortal->GetActorLocation(), OtherRotation, false, true);
+				FRotator NewRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
+
+				if (Cast<ACharacter>(Other))
+				{
+					TestChar = Cast<ACharacter>(Other);
+					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
+					TestChar->GetController()->SetControlRotation(NewRotation);
+				}
+				else
+				{
+					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
+				}
 			}
 		}
 	}
