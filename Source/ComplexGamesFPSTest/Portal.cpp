@@ -61,7 +61,10 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
+				FRotator OldRotation = FRotator(0.0f, Other->GetActorForwardVector().Z, 0.0f);
 				FRotator NewRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
+
+				
 
 				if (Cast<ACharacter>(Other))
 				{
@@ -71,7 +74,7 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 				}
 				else
 				{
-					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
+					Other->TeleportTo(OtherPortal->GetActorLocation(), OldRotation, false, true);
 				}
 			}
 		}

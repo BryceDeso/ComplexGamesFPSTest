@@ -41,6 +41,7 @@ public:
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCameraComponent* MainCamera;
 
+	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCapsuleComponent* TestComponent;
 
 	bool PortalPlaced1;

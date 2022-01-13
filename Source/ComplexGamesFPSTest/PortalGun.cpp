@@ -30,7 +30,6 @@ void UPortalGun::BeginPlay()
 			MainCamera = Cast<UCameraComponent>(TestComponent->GetAttachChildren()[i]);
 		}
 	}
-	
 
 	BindToInput();
 }
@@ -40,7 +39,12 @@ void UPortalGun::BeginPlay()
 void UPortalGun::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	// ...
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, FString::Printf(TEXT("Yaw Rotation: %s"), 
+	//	FVector(
+	//	TestComponent->GetForwardVector().X, 
+	//	TestComponent->GetForwardVector().Y, 
+	//	TestComponent->GetForwardVector().Z
+	//	)));
 }
 
 void UPortalGun::BindToInput()
