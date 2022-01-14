@@ -61,20 +61,20 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
-				FRotator OldRotation = FRotator(0.0f, Other->GetActorForwardVector().Z, 0.0f);
-				FRotator NewRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
+				FRotator ObjectRotation = FRotator(0.0f, Other->GetActorRotation().Yaw, 0.0f);
+				FRotator PortalRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
 
-				
+				FRotator NewRotation = PortalRotation;
 
 				if (Cast<ACharacter>(Other))
 				{
 					TestChar = Cast<ACharacter>(Other);
-					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
+					Other->SetActorLocation(OtherPortal->GetActorLocation());
 					TestChar->GetController()->SetControlRotation(NewRotation);
 				}
 				else
 				{
-					Other->TeleportTo(OtherPortal->GetActorLocation(), OldRotation, false, true);
+					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
 				}
 			}
 		}

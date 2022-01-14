@@ -65,7 +65,7 @@ void UPortalGun::MovePortal1()
 		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
 
-		DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
+		/*DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);*/
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
@@ -124,7 +124,7 @@ void UPortalGun::MovePortal2()
 		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
 
-		DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
+		/*DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);*/
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
