@@ -92,6 +92,10 @@
     Type: void
     Description: Will spawn Portal2 at the impact point of a line trace. If Portal2 has already been placed, it will move Portal12 to the new impact point of the line trace.
 
+    Name: ExitGame()
+    Type: void
+    Description: Allows user to press the "Esc" key to exit the game.
+
 ---
 
 ### Portal

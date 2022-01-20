@@ -54,6 +54,7 @@ void UPortalGun::BindToInput()
 	UInputComponent* InputComponent = NewObject<UInputComponent>(this);
 	InputComponent->BindAction("PlacePortal1", IE_Pressed, this, &UPortalGun::MovePortal1);
 	InputComponent->BindAction("PlacePortal2", IE_Pressed, this, &UPortalGun::MovePortal2);
+	InputComponent->BindAction("ExitGame", IE_Pressed, this, &UPortalGun::ExitGame);
 }
 
 //Function used to place and move portal1.
@@ -183,4 +184,9 @@ void UPortalGun::MovePortal2()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("No Main Camera found!")));
 	}
+}
+
+void UPortalGun::ExitGame()
+{
+	FGenericPlatformMisc::RequestExit(false);
 }

@@ -32,6 +32,8 @@ public:
 	void MovePortal1();
 	void MovePortal2();
 
+	void ExitGame();
+
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	TSubclassOf<APortal> Portal1_BP;
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
