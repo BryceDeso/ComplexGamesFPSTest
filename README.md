@@ -32,6 +32,6 @@ If you want to use this system in your own project, go to the releases tab, clic
 
 You can go to your computers files, and from there go to downloads and right click on __PortalSystem.zip__ then click extract all.
 
-Once that is done, go to where you stored the file, then open __PortalSystem__. After that there will be a read me that will walk you thorugh
+Once that is done, go to where you stored the file, then open __PortalSystem__. After that open __README__ and this will guide you to
 
 setting up this portal system in your own project. 
