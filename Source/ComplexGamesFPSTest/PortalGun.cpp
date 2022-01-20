@@ -20,16 +20,8 @@ UPortalGun::UPortalGun()
 void UPortalGun::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TestComponent = this->GetOwner()->FindComponentByClass<UCapsuleComponent>();
-
-	for (int i = 0; i < TestComponent->GetAttachChildren().Num(); i++)
-	{
-		if (TestComponent->GetAttachChildren()[i]->ComponentHasTag("MainCamera"))
-		{
-			MainCamera = Cast<UCameraComponent>(TestComponent->GetAttachChildren()[i]);
-		}
-	}
+	
+	GetMainCamera();
 
 	BindToInput();
 }
@@ -39,14 +31,24 @@ void UPortalGun::BeginPlay()
 void UPortalGun::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, FString::Printf(TEXT("Yaw Rotation: %s"), 
-	//	FVector(
-	//	TestComponent->GetForwardVector().X, 
-	//	TestComponent->GetForwardVector().Y, 
-	//	TestComponent->GetForwardVector().Z
-	//	)));
 }
 
+//Gets the camera component tagged with "MainCamera" attached to a capsule component.
+void UPortalGun::GetMainCamera()
+{
+	TestComponent = this->GetOwner()->FindComponentByClass<UCapsuleComponent>();
+
+	for (int i = 0; i < TestComponent->GetAttachChildren().Num(); i++)
+	{
+		if (TestComponent->GetAttachChildren()[i]->ComponentHasTag("MainCamera"))
+		{
+			MainCamera = Cast<UCameraComponent>(TestComponent->GetAttachChildren()[i]);
+			break;
+		}
+	}
+}
+
+//Binds inputs allowing users to place portals.
 void UPortalGun::BindToInput()
 {
 	UInputComponent* InputComponent = NewObject<UInputComponent>(this);
@@ -54,25 +56,27 @@ void UPortalGun::BindToInput()
 	InputComponent->BindAction("PlacePortal2", IE_Pressed, this, &UPortalGun::MovePortal2);
 }
 
+//Function used to place and move portal1.
 void UPortalGun::MovePortal1()
 {
 	if (MainCamera != NULL)
 	{
+		//Initalizes the line trace
 		FHitResult OutHit;
 		FVector Start = MainCamera->GetComponentLocation();
 
 		FVector ForwardVector = MainCamera->GetForwardVector();
 		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
-
-		/*DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);*/
-
+		
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
+		//Checks if there is an actor being hit by the line trace and if the actor hit is a portal wall.
 		if (OutHit.GetActor() && OutHit.GetActor()->GetRootComponent()->ComponentHasTag("PortalWall"))
 		{
 			FActorSpawnParameters PortalSpawnParams;
 
+			//Initalizes the location and rotation of portal1.
 			const FVector MovePortal = OutHit.ImpactPoint;
 			const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
 
@@ -80,24 +84,28 @@ void UPortalGun::MovePortal1()
 			{
 				if (OutHit.bBlockingHit)
 				{
-					if (!PortalPlaced1)
+					//Initalizes portal1 and spawns it into the scene if portal1 hasn't already been placed.
+					if (!Portal1Placed)
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal1, MovePortal, RotatePortal, PortalSpawnParams);
-						CurrentPortal1 = PortalSpawner;
 
-						if (PortalPlaced2)
+						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal1_BP, MovePortal, RotatePortal, PortalSpawnParams);
+						Portal1 = PortalSpawner;
+
+						//Checks if portal2 has been placed and if so, will then attach portal1 to portal2.
+						if (Portal2Placed)
 						{
-							CurrentPortal1->OtherPortal = CurrentPortal2;
-							CurrentPortal2->OtherPortal = CurrentPortal1;
+							Portal1->OtherPortal = Portal2;
+							Portal2->OtherPortal = Portal1;
 						}
 
-						PortalPlaced1 = true;
+						Portal1Placed = true;
 					}
+					//If portal1 has already been placed, move it to current hit location.
 					else
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-						CurrentPortal1->TeleportTo(MovePortal, RotatePortal);
+						Portal1->TeleportTo(MovePortal, RotatePortal);
 					}
 				}
 			}
@@ -113,10 +121,12 @@ void UPortalGun::MovePortal1()
 	}
 }
 
+//Function used to place and move portal2.
 void UPortalGun::MovePortal2()
 {
 	if (MainCamera != NULL)
 	{
+		//Initalizes the line trace
 		FHitResult OutHit;
 		FVector Start = MainCamera->GetComponentLocation();
 
@@ -124,14 +134,14 @@ void UPortalGun::MovePortal2()
 		FVector End((ForwardVector * 10000.f) + Start);
 		FCollisionQueryParams CollisionParams;
 
-		/*DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);*/
-
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 
+		//Checks if the Actor hit by the line trace is a portal wall.
 		if (OutHit.GetActor() && OutHit.GetActor()->GetRootComponent()->ComponentHasTag("PortalWall"))
 		{
 			FActorSpawnParameters PortalSpawnParams;
 
+			//Initalizes the location and rotation of portal2.
 			const FVector MovePortal = OutHit.ImpactPoint;
 			const FRotator RotatePortal = OutHit.GetActor()->GetActorRotation();
 
@@ -139,24 +149,27 @@ void UPortalGun::MovePortal2()
 			{
 				if (OutHit.bBlockingHit)
 				{
-					if (!PortalPlaced2)
+					//Initalizes portal2 and spawns it into the scene if portal2 hasn't already been placed.
+					if (!Portal2Placed)
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2, MovePortal, RotatePortal, PortalSpawnParams);
-						CurrentPortal2 = PortalSpawner;
+						APortal* PortalSpawner = GetWorld()->SpawnActor<APortal>(Portal2_BP, MovePortal, RotatePortal, PortalSpawnParams);
+						Portal2 = PortalSpawner;
 
-						if (PortalPlaced1)
+						//Checks if portal1 has been placed and if so, will then attach portal2 to portal1.
+						if (Portal1Placed)
 						{
-							CurrentPortal2->OtherPortal = CurrentPortal1;
-							CurrentPortal1->OtherPortal = CurrentPortal2;
+							Portal2->OtherPortal = Portal1;
+							Portal1->OtherPortal = Portal2;
 						}
 
-						PortalPlaced2 = true;
+						Portal2Placed = true;
 					}
+					//If portal has already been placed, move it to current hit location.
 					else
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-						CurrentPortal2->TeleportTo(MovePortal, RotatePortal);
+						Portal2->TeleportTo(MovePortal, RotatePortal);
 					}
 				}
 			}

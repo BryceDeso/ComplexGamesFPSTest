@@ -25,18 +25,20 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void GetMainCamera();
+
 	void BindToInput();
 
 	void MovePortal1();
 	void MovePortal2();
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
-	TSubclassOf<APortal> Portal1;
+	TSubclassOf<APortal> Portal1_BP;
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
-	TSubclassOf<APortal> Portal2;
+	TSubclassOf<APortal> Portal2_BP;
 
-	APortal* CurrentPortal1;
-	APortal* CurrentPortal2;
+	APortal* Portal1;
+	APortal* Portal2;
 
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCameraComponent* MainCamera;
@@ -44,6 +46,6 @@ public:
 	UPROPERTY(AdvancedDisplay, EditAnywhere)
 	UCapsuleComponent* TestComponent;
 
-	bool PortalPlaced1;
-	bool PortalPlaced2;
+	bool Portal1Placed;
+	bool Portal2Placed;
 };

@@ -17,6 +17,9 @@ APortalWall::APortalWall()
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->AttachTo(Collider);
+	Arrow->SetArrowColor(FColor::White);
+	FQuat LocalArrowRotation = FQuat(FRotator(GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z));
+	Arrow->AddLocalRotation(LocalArrowRotation);
 }
 
 // Called when the game starts or when spawned
