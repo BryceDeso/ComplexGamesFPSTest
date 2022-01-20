@@ -13,9 +13,12 @@ APortal::APortal()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	Collider->SetRelativeScale3D(FVector(0.1f, 1.4f, 2.8f));
 	RootComponent = Collider;
 
 	Collider->SetGenerateOverlapEvents(true);
+
+
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->AttachTo(Collider);
