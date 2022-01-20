@@ -2,6 +2,11 @@
 
 ### Getting and Opening the project:
 
+To get the project and use it, go to the releases tab, click on __DemoBuild.zip__ to start downloading the project.
+
+You can go to your computers files, and from there go to downloads and right click on __DemoBuild.zip__ then click extract all.
+
+Once that is done, go to where you stored the file, then open __DemoBuild__, then double click __ComplexSystemDemo.exe__ to run the program. 
 
 ---
 ### Character Controls:
@@ -20,3 +25,13 @@ To place and move portals hold the Shift key down and press one of the following
 
     Right Mouse Button: Place Portal 1
     Left Mouse Button: Place Portal 2
+
+### Importing To your project
+
+If you want to use this system in your own project, go to the releases tab, click on __PortalSystem.zip__ to start downloading the system.
+
+You can go to your computers files, and from there go to downloads and right click on __PortalSystem.zip__ then click extract all.
+
+Once that is done, go to where you stored the file, then open __PortalSystem__. After that there will be a read me that will walk you thorugh
+
+setting up this portal system in your own project. 
