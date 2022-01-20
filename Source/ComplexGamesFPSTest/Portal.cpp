@@ -3,7 +3,7 @@
 
 #include "Portal.h"
 #include "Components/BoxComponent.h"
-#include "Math/Quat.h"
+#include "GameFramework/Character.h"
 #include "Components/ArrowComponent.h"
 
 // Sets default values
@@ -19,6 +19,9 @@ APortal::APortal()
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->AttachTo(Collider);
+	Arrow->SetArrowColor(FColor::White);
+	FQuat LocalArrowRotation = FQuat(FRotator(GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z));
+	Arrow->AddLocalRotation(LocalArrowRotation);
 
 	PortalActive = true;
 }
@@ -28,8 +31,8 @@ void APortal::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Collider->OnComponentBeginOverlap.AddDynamic(this, &APortal::TeleportPlayer);
-	Collider->OnComponentEndOverlap.AddDynamic(this, &APortal::EndOverlap);
+	Collider->OnComponentBeginOverlap.AddDynamic(this, &APortal::TeleportObject);
+	Collider->OnComponentEndOverlap.AddDynamic(this, &APortal::ReActivatePortal);
 }
 
 // Called every frame
@@ -47,7 +50,8 @@ void APortal::Tick(float DeltaTime)
 	}
 }
 
-void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp,
+//Teleports an object to the OtherPortal's location if it collides with this portal's collider.
+void APortal::TeleportObject(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherPortal)
@@ -57,14 +61,25 @@ void APortal::TeleportPlayer(class UPrimitiveComponent* OverlappedComp, class AA
 			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
-				FRotator OtherRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
-				Other->TeleportTo(OtherPortal->GetActorLocation(), OtherRotation, false, true);
+				FRotator NewRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
+
+				if (Cast<ACharacter>(Other))
+				{
+					TestChar = Cast<ACharacter>(Other);
+					Other->SetActorLocation(OtherPortal->GetActorLocation());
+					TestChar->GetController()->SetControlRotation(NewRotation);
+				}
+				else
+				{
+					Other->TeleportTo(OtherPortal->GetActorLocation(), NewRotation, false, true);
+				}
 			}
 		}
 	}
 }
 
-void APortal::EndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+//After an object teleports and exits it's collider, will then set PortalActive to true.
+void APortal::ReActivatePortal(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (Other->GetRootComponent()->ComponentHasTag("PortableObject"))
 	{
