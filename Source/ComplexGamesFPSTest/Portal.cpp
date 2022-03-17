@@ -61,7 +61,7 @@ void APortal::TeleportObject(class UPrimitiveComponent* OverlappedComp, class AA
 	{
 		if ((Other != NULL) && (Other != this))
 		{
-			if (Other->GetRootComponent()->ComponentHasTag("PortableObject") && PortalActive == true)
+			if (Other->Tags.Contains("PortableObject") && PortalActive == true)
 			{
 				OtherPortal->PortalActive = false;
 				FRotator NewRotation = FRotator(0.0f, OtherPortal->GetActorRotation().Yaw, 0.0f);
@@ -84,7 +84,7 @@ void APortal::TeleportObject(class UPrimitiveComponent* OverlappedComp, class AA
 //After an object teleports and exits it's collider, will then set PortalActive to true.
 void APortal::ReActivatePortal(class UPrimitiveComponent* OverlappedComp, class AActor* Other, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (Other->GetRootComponent()->ComponentHasTag("PortableObject"))
+	if (Other->Tags.Contains("PortableObject"))
 	{
 		PortalActive = true;
 	}
