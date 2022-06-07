@@ -1,4 +1,4 @@
-# Portal GunSystem Assessment Demo
+# Portal Gun System Demo
 
 ### Getting and Opening the demo:
 
