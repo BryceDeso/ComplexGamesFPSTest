@@ -2,11 +2,11 @@
 
 ### Getting and Opening the demo:
 
-To get the project and use it, go to the releases tab, click on __DemoBuild.zip__ to start downloading the project.
+To get the project and use it, go to the releases tab, click on __PortalGunDemo.zip__ to start downloading the project.
 
-You can go to your computers files, and from there go to downloads and right click on __DemoBuild.zip__ then click extract all.
+You can go to your computers files, and from there go to downloads and right click on __PortalGunDemo.zip__ then click extract all.
 
-Once that is done, go to where you stored the file, then open __DemoBuild__, then double click __ComplexSystemDemo.exe__ to run the program. 
+Once that is done, go to where you stored the file, then open __PortalGunDemo__, then double click __PortalGunDemo.exe__ to run the program. 
 
 ---
 ### Character Controls:
