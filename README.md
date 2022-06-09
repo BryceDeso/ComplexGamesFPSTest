@@ -1,5 +1,9 @@
 # Portal Gun System Demo
 
+### Summary:
+
+This a portal gun system made in the Unreal Engine, with the intent that this system could be implemented into other Unreal projects.
+
 ### Getting and Opening the demo:
 
 To get the project and use it, go to the releases tab, click on __PortalGunDemo.zip__ to start downloading the project.
