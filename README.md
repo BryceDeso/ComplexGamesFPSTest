@@ -2,7 +2,7 @@
 
 ### Summary:
 
-This a portal gun system made in the Unreal Engine, with the intent that this system could be implemented into other Unreal projects.
+This a portal gun system made in the Unreal Engine, with the intent that this system could be implemented into other Unreal projects. There is a demo level to show the system.
 
 ### Getting and Opening the demo:
 
